@@ -12,17 +12,17 @@ export async function loadSession() {
     .single();
 
   if (error) {
-    console.log('No session found or error:', error.message);
+    console.error('No session found:', error.message);
     return null;
   }
 
-  return data.data;
+  return data?.data || null;
 }
 
-export async function saveSession(sessionData) {
+export async function saveSession(authData) {
   const { error } = await supabase
     .from('sessions')
-    .upsert({ id: 'whatsapp', data: sessionData, updated_at: new Date() });
+    .upsert({ id: 'whatsapp', data: authData, updated_at: new Date() });
 
-  if (error) console.error('Error saving session:', error.message);
+  if (error) console.error('Failed to save session:', error.message);
 }
